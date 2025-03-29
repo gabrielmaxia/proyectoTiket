@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaapplication1.DetallesTiketsController">
+   <children>
+      <AnchorPane prefHeight="400.0" prefWidth="610.0" style="-fx-background-color: #a5add8;">
+         <children>
+            <Button layoutX="61.0" layoutY="106.0" mnemonicParsing="false" text="ver tikets" />
+            <AnchorPane layoutX="25.0" layoutY="151.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #00fff0;" />
+            <Button layoutX="350.0" layoutY="175.0" mnemonicParsing="false" text="volver a inicio" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
