@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller=".PantallPrincipalController">
+   <children>
+      <Label layoutX="54.0" layoutY="35.0" text="Pantalla Principal">
+         <font>
+            <Font name="Book Antiqua" size="65.0" />
+         </font>
+      </Label>
+      <Button layoutX="65.0" layoutY="236.0" mnemonicParsing="false" text="Ver tikets" />
+      <Button layoutX="377.0" layoutY="236.0" mnemonicParsing="false" text="Cerrar sesion" />
+   </children>
+</AnchorPane>
