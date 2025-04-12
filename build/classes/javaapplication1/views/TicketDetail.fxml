@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaapplication1.Controles.TicketDetailController">
+    <top>
+        <HBox style="-fx-background-color: #2c3e50; -fx-padding: 15;">
+            <Button onAction="#handleBack" style="-fx-background-color: #e36767;" text="Volver" />
+            <Label style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="                         Detalle del Ticket #001" />
+        </HBox>
+    </top>
+    
+    <center>
+        <VBox spacing="10" style="-fx-padding: 20; -fx-background-color: #33a99d;">
+            <Label style="-fx-font-size: 16px;" text="Título: Problema con el sistema" />
+            <Label style="-fx-font-size: 16px;" text="Estado: Abierto" />
+            <Label style="-fx-font-size: 16px;" text="Prioridad: Alta" />
+            <TextArea editable="false" style="-fx-font-size: 14px; -fx-background-color: #19d4c0;" text="Descripción completa del problema reportado..." />
+        </VBox>
+    </center>
+</BorderPane>
