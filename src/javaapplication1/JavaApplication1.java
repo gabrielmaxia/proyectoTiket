@@ -21,7 +21,7 @@ public class JavaApplication1 extends Application {
     @Override
     public void start(Stage stage)  {
         try {
-            // Código original (sin cambios)
+           
             primaryStage = stage;
             showLogin();
             primaryStage.show();
@@ -32,8 +32,6 @@ public class JavaApplication1 extends Application {
         }
     }
 
-    // === INICIO CAMBIO ===
-    // Métodos nuevos para navegación a las pantallas agregadas:
     public static void showNewTicket() throws Exception {
         Parent root = FXMLLoader.load(JavaApplication1.class.getResource("/javaapplication1/views/NewTicket.fxml"));
         primaryStage.setTitle("Nuevo Ticket");
@@ -47,7 +45,7 @@ public class JavaApplication1 extends Application {
     }
     // === FIN CAMBIO ===
 */
-    // Métodos existentes (sin cambios):
+   
     public static void showLogin() {
         try {
             Parent root = FXMLLoader.load(JavaApplication1.class.getResource("/javaapplication1/views/Login.fxml"));
@@ -78,7 +76,7 @@ public class JavaApplication1 extends Application {
         primaryStage.setScene(new Scene(root, 1000, 700));
     }
 
-    // Método auxiliar (sin cambios):
+   
     public static void showErrorAlert(String message) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
             javafx.scene.control.Alert.AlertType.ERROR);

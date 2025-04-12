@@ -11,24 +11,24 @@ import javafx.scene.control.TextField;
 import javaapplication1.JavaApplication1;
 
 
-//Implementación de POO: Creamos una clase base para manejo de autenticación
+
     abstract class AuthenticationHandler {
     public abstract boolean authenticate(String username, String password) throws AuthenticationException;
 }
 
-// Implementación de POO: Clase concreta para autenticación
+
 class DatabaseAuthenticationHandler extends AuthenticationHandler {
     @Override
     public boolean authenticate(String username, String password) throws AuthenticationException {
         if(username == null || password == null) {
             throw new AuthenticationException("Credenciales no pueden ser nulas");
         }
-        // Lógica de autenticación simulada (en producción conectaría a BD)
+     
         return username.equals("admin") && password.equals("admin123");
     }
 }
 
-// Implementación de POO: Excepción personalizada
+
 class AuthenticationException extends Exception {
     public AuthenticationException(String message) {
         super(message);
@@ -57,10 +57,10 @@ public class LoginController {
                 showError("Credenciales incorrectas");
             }
         } catch (AuthenticationException e) {
-            // Manejo de excepciones específicas
+        
             showError("Error de autenticación: " + e.getMessage());
         } catch (Exception e) {
-            // Manejo de excepciones genéricas
+        
             showError("Error inesperado: " + e.getMessage());
             e.printStackTrace();
         }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="594.0" prefWidth="728.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaapplication1.Controles.DashboardController">
+    <top>
+        <HBox prefHeight="95.0" prefWidth="728.0" style="-fx-background-color: #2c3e50; -fx-padding: 15;">
+            <Label style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="Pantalla Principal" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button onAction="#handleLogout" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Cerrar Sesión">
+            <cursor>
+               <Cursor fx:constant="CLOSED_HAND" />
+            </cursor></Button>
+        </HBox>
+    </top>
+    
+    <center>
+        <VBox alignment="CENTER" prefHeight="1615.0" prefWidth="704.0" spacing="20" style="-fx-background-color: #a0bdf7;">
+            <Button graphicTextGap="5.0" onAction="#handleViewTickets" style="-fx-font-size: 16px; -fx-pref-width: 200px;" text="Gestión de Tickets">
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+            <effect>
+               <InnerShadow />
+            </effect></Button>
+            <Button onAction="#handleViewReports" style="-fx-font-size: 16px; -fx-pref-width: 200px;" text="Reportes">
+            <effect>
+               <InnerShadow />
+            </effect>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor></Button>
+        </VBox>
+    </center>
+</BorderPane>
