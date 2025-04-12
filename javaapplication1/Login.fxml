@@ -6,10 +6,10 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaapplication1.LoginController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="javaapplication1.LoginController">
    <Label layoutX="42.0" layoutY="137.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Iniciar Sesión" />
     <TextField fx:id="usernameField" layoutX="267.0" layoutY="174.0" promptText="Nombre de usuario" />
     <PasswordField fx:id="passwordField" layoutX="267.0" layoutY="126.0" promptText="Contraseña" />
     <Label fx:id="errorLabel" style="-fx-text-fill: red;" />
-   <Button id="ñdd" layoutX="105.0" layoutY="228.0" mnemonicParsing="false" text="Inisiar sesion" /> 
+   <Button layoutX="105.0" layoutY="228.0" mnemonicParsing="false" text="Inisiar sesion" /> 
 </AnchorPane>
