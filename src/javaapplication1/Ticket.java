@@ -37,6 +37,12 @@ public Ticket(String id, String title, String status, String date, String descri
         this.title = title;
     }
     
+  Ticket ticket = new Ticket(
+            0,  // ID se genera automáticamente
+            txtTitulo.getText(),
+            txtDescripcion.getText(),
+            "Pendiente"  // Estado por defecto
+        );
   
     public String getStatus() { return status; }
     public String getDate() { return date; }
