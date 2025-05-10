@@ -4,6 +4,10 @@
  */
 package javaapplication1.Controles;
 
+
+import javaapplication1.database.UsuarioDAO;
+import javaapplication1.models.Usuario;
+import javafx.fxml.FXML;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -51,16 +55,14 @@ public class LoginController {
             validateInputs();
             
             // Implementación de POO: Polimorfismo (llamada al método abstracto)
-            if(authHandler.authenticate(usernameField.getText(), passwordField.getText())) {
-                JavaApplication1.showDashboard();
-            } else {
-                showError("Credenciales incorrectas");
-            }
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
+            Usuario user = usuarioDAO.authenticate(usernameField.getText(), passwordField.getText());
+            
+            JavaApplication1.showDashboard();
+            
         } catch (AuthenticationException e) {
-        
-            showError("Error de autenticación: " + e.getMessage());
+            showError("Error: " + e.getMessage());
         } catch (Exception e) {
-        
             showError("Error inesperado: " + e.getMessage());
             e.printStackTrace();
         }
@@ -83,4 +85,6 @@ public class LoginController {
     private void showError(String message) {
         errorLabel.setText(message);
     }
+    
+    
 }

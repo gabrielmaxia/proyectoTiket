@@ -11,6 +11,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javaapplication1.JavaApplication1;
 import javaapplication1.Ticket;
+import javaapplication1.database.TicketDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javaapplication1.interfaces.TicketManager;
@@ -46,14 +47,12 @@ import javaapplication1.exceptions.DataLoadException;
     public void loadTickets() throws DataLoadException {
         try {
             
-            ObservableList<Ticket> tickets = FXCollections.observableArrayList(
-                new Ticket("1", "Error en login"),
-                new Ticket("2", "Problema con impresión", "En progreso", "2023-11-19", ""),
-                new Ticket("3", "Solicitud de nuevo usuario")
-            );
+            TicketDAO ticketDAO = new TicketDAO();
+            ObservableList<Ticket> tickets = FXCollections.observableArrayList(ticketDAO.getAllTickets());
             ticketsTable.setItems(tickets);
-        } catch (Exception e) {
-            throw new DataLoadException("Error al cargar datos: " + e.getMessage());
+            
+        } catch (DataLoadException e) {
+            JavaApplication1.showErrorAlert("Error al cargar tickets: " + e.getMessage());
         }
     }
 

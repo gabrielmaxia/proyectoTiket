@@ -9,11 +9,8 @@ import javaapplication1.JavaApplication1;
 
 public class TicketDetailController {
     @FXML
-    private void handleBack() {
-        try {
-            JavaApplication1.showTicketList();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void handleBack() throws Exception {
+        JavaApplication1.showTicketList();
     }
+    
 }

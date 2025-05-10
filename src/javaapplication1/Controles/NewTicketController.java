@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javaapplication1.JavaApplication1;
 import javaapplication1.Ticket;
+import javaapplication1.database.TicketDAO;
 import javaapplication1.exceptions.InvalidDataException;
 
 public class NewTicketController {
@@ -30,11 +31,15 @@ public class NewTicketController {
             validateInputs();
             Ticket newTicket = createTicket();
             saveTicket(newTicket);
+            
+            
+            TicketDAO ticketDAO = new TicketDAO();
+            ticketDAO.createTicket(newTicket, 1);
             JavaApplication1.showTicketList();
         } catch (InvalidDataException e) {
             errorLabel.setText(e.getMessage());
         } catch (Exception e) {
-            JavaApplication1.showErrorAlert("Error al guardar el ticket: " + e.getMessage());
+            JavaApplication1.showErrorAlert("Error al guardar en la base de datos: " + e.getMessage());
         }
     }
 

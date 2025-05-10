@@ -9,12 +9,8 @@ import javaapplication1.JavaApplication1;
 
 public class Pantalla_Principal {
     @FXML
-    private void handleViewTickets() {
-        try {
-            JavaApplication1.showTicketList();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void handleViewTickets() throws Exception {
+        JavaApplication1.showTicketList();
     }
 
     @FXML
