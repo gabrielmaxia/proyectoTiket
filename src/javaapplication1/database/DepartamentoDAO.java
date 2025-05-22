@@ -35,7 +35,6 @@ public class DepartamentoDAO {
         }
     }
     
-    // Asignar técnico a departamento
     public void asignarTecnico(int usuarioId, int departamentoId) throws SQLException {
         String sql = "INSERT INTO usuarios_departamentos (usuario_id, departamento_id) VALUES (?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -43,6 +42,49 @@ public class DepartamentoDAO {
             
             stmt.setInt(1, usuarioId);
             stmt.setInt(2, departamentoId);
+            stmt.executeUpdate();
+        }
+    }
+    
+    public void addDepartamento(Departamento depto) throws SQLException {
+        String sql = "INSERT INTO departamentos (nombre, descripcion) VALUES (?, ?)";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            
+            stmt.setString(1, depto.getNombre());
+            stmt.setString(2, depto.getDescripcion());
+            stmt.executeUpdate();
+            
+            // Obtener el ID generado
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    depto.setId(rs.getInt(1));
+                }
+            }
+        }
+    }
+
+    public void updateDepartamento(Departamento depto) throws SQLException {
+        String sql = "UPDATE departamentos SET nombre = ?, descripcion = ? WHERE id = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, depto.getNombre());
+            stmt.setString(2, depto.getDescripcion());
+            stmt.setInt(3, depto.getId());
+            stmt.executeUpdate();
+        }
+    }
+
+    public void deactivateDepartamento(int id) throws SQLException {
+        String sql = "UPDATE departamentos SET activo = FALSE WHERE id = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, id);
             stmt.executeUpdate();
         }
     }

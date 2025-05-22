@@ -1,15 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package javaapplication1.Controles;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javaapplication1.JavaApplication1;
-import javaapplication1.Ticket;
 import javaapplication1.database.TicketDAO;
-import javaapplication1.exceptions.InvalidDataException;
+import java.sql.SQLException;
 
 public class NewTicketController {
     @FXML private TextField titleField;
@@ -20,52 +18,51 @@ public class NewTicketController {
 
     @FXML
     public void initialize() {
-  
-        departmentField.getItems().addAll("Soporte Técnico", "Ventas", "RH");
-        priorityField.getItems().addAll("Alta", "Media", "Baja");
+        // Configurar opciones de los ComboBox
+        departmentField.getItems().addAll("Soporte Técnico", "Ventas", "TI", "Recursos Humanos");
+        priorityField.getItems().addAll("alta", "media", "baja");
     }
 
     @FXML
-    private void handleSubmit() {
-        try {
-            validateInputs();
-            Ticket newTicket = createTicket();
-            saveTicket(newTicket);
-            
-            
-            TicketDAO ticketDAO = new TicketDAO();
-            ticketDAO.createTicket(newTicket, 1);
-            JavaApplication1.showTicketList();
-        } catch (InvalidDataException e) {
-            errorLabel.setText(e.getMessage());
-        } catch (Exception e) {
-            JavaApplication1.showErrorAlert("Error al guardar en la base de datos: " + e.getMessage());
+private void handleSubmit() {
+    try {
+        // Validar campos
+        if (titleField.getText().trim().isEmpty() || descriptionField.getText().trim().isEmpty()) {
+            errorLabel.setText("Título y descripción son obligatorios");
+            return;
         }
-    }
 
-    private void validateInputs() throws InvalidDataException {
-        if (titleField.getText().isEmpty() || descriptionField.getText().isEmpty() 
-            || departmentField.getValue() == null || priorityField.getValue() == null) {
-            throw new InvalidDataException("Todos los campos marcados con * son obligatorios.");
+        String departamento = departmentField.getValue();
+        String prioridad = priorityField.getValue();
+        
+        if (departamento == null || prioridad == null) {
+            errorLabel.setText("Seleccione departamento y prioridad");
+            return;
         }
-    }
 
-    private Ticket createTicket() {
-        return new Ticket(
-            generateId(), 
-            titleField.getText(), 
-            "Pendiente", 
-            java.time.LocalDate.now().toString(), 
-            descriptionField.getText()
+        new TicketDAO().createSimpleTicket(
+            titleField.getText(),
+            descriptionField.getText(),
+            departamento,
+            prioridad
         );
+        
+        errorLabel.setStyle("-fx-text-fill: green;");
+        errorLabel.setText("Ticket creado!");
+        
+    } catch (SQLException e) {
+        errorLabel.setStyle("-fx-text-fill: red;");
+        errorLabel.setText("Error: " + e.getMessage());
+        e.printStackTrace();
     }
+}
 
-    private String generateId() {
-        return "TKT-" + System.currentTimeMillis();
-    }
-
-    private void saveTicket(Ticket ticket) {
-    
-        System.out.println("Ticket guardado: " + ticket.getId());
+    @FXML
+    private void handleBack() {
+        try {
+            JavaApplication1.showDashboard();
+        } catch (Exception e) {
+            errorLabel.setText("Error al volver al dashboard: " + e.getMessage());
+        }
     }
 }

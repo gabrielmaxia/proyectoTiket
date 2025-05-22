@@ -18,7 +18,7 @@ public class TestConnection {
         
         try (Connection conn = DatabaseConnection.getConnection()) {
             System.out.println("✅ ¡Conexión exitosa a PostgreSQL!");
-            System.out.println("URL utilizada: " + "DatabaseConnection.URL");
+            System.out.println("URL utilizada: " + DatabaseConnection.URL);
         } catch (Exception e) {
             System.err.println("❌ Error de conexión:");
             e.printStackTrace();

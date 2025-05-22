@@ -15,7 +15,7 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
     // === DATOS ACTUALIZADOS CON TU CONFIGURACIÓN DE RENDER ===
-    private static final String URL = "jdbc:postgresql://dpg-d060g6idbo4c73e37ss0-a.oregon-postgres.render.com:5432/tiketbase";
+    public static final String URL = "jdbc:postgresql://dpg-d060g6idbo4c73e37ss0-a.oregon-postgres.render.com:5432/tiketbase";
     private static final String USER = "tiketbase_user";
     private static final String PASSWORD = "FQj0padJz85XDtfNvwz1CClROM1WxbGW";
 

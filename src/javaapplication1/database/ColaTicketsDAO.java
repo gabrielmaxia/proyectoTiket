@@ -6,7 +6,6 @@ package javaapplication1.database;
 
 import java.sql.*;
 import javaapplication1.Ticket;
-import javaapplication1.exceptions.DataLoadException;
 
 public class ColaTicketsDAO {
     
@@ -30,7 +29,7 @@ public class ColaTicketsDAO {
         return null;
     }
     
-    // Agregar ticket a la cola (normalmente se hace automáticamente con el trigger)
+    // Agregar ticket a la cola 
     public void agregarACola(String ticketId, int departamentoId, String prioridad) throws SQLException {
         String sql = "INSERT INTO cola_tickets (departamento_id, ticket_id, prioridad) VALUES (?, ?, ?)";
         

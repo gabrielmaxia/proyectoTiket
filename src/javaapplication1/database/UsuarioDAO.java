@@ -7,46 +7,55 @@ package javaapplication1.database;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import javaapplication1.database.DatabaseConnection;
 import javaapplication1.exceptions.DataLoadException;
+import javaapplication1.models.Administrador;
+import javaapplication1.models.Tecnico;
 import javaapplication1.models.Usuario;
 import javax.naming.AuthenticationException;
 
 public class UsuarioDAO {
     // Método para autenticar un usuario (usado en LoginController)
     public Usuario authenticate(String username, String password) throws AuthenticationException {
+    String sql = "SELECT * FROM usuarios WHERE username = ? AND password = ?";
+    
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
         
-        String sql = "SELECT * FROM usuarios WHERE username = ?";
+        stmt.setString(1, username.trim());
+        stmt.setString(2, password.trim());
         
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setString(1, username); // Asigna solo el username
-            ResultSet rs = stmt.executeQuery();
-            
+        try (ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
-                // Verifica la contraseña (sin cifrado para pruebas)
-                String dbPassword = rs.getString("password");
-                if (dbPassword.equals(password)) {
-                    return new Usuario(
-                        rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("email"),
-                        rs.getString("username"),
-                        dbPassword,
-                        rs.getString("rol")
-                    );
-                } else {
-                    throw new AuthenticationException("Contraseña incorrecta");
+                String rol = rs.getString("rol").trim().toLowerCase();
+                
+                switch (rol) {
+                    case "tecnico":
+                        return new Tecnico(
+                            rs.getInt("id"),
+                            rs.getString("nombre"),
+                            rs.getString("email"),
+                            username,
+                            password,
+                            rs.getString("departamento")
+                        );
+                    case "admin": // Cambiado de "administrador" a "admin"
+                        return new Administrador(
+                            rs.getInt("id"),
+                            rs.getString("nombre"),
+                            rs.getString("email"),
+                            username,
+                            password
+                        );
+                    default:
+                        throw new AuthenticationException("Rol no válido. Se recibió: " + rol);
                 }
-            } else {
-                throw new AuthenticationException("Usuario no encontrado");
             }
-            
-        } catch (SQLException e) {
-            throw new AuthenticationException("Error de base de datos: " + e.getMessage());
         }
+        throw new AuthenticationException("Usuario o contraseña incorrectos");
+    } catch (SQLException e) {
+        throw new AuthenticationException("Error de BD: " + e.getMessage());
     }
+}
 
 
     // Métodos adicionales (registro, actualización, etc.)
@@ -70,26 +79,38 @@ public class UsuarioDAO {
     }
 }
     public Usuario getUserById(int id) throws SQLException {
-        String sql = "SELECT * FROM usuarios WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return new Usuario(
+    String sql = "SELECT * FROM usuarios WHERE id = ?";
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        
+        stmt.setInt(1, id);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                String rol = rs.getString("rol").toLowerCase();
+                if ("tecnico".equals(rol)) {
+                    return new Tecnico(
                         rs.getInt("id"),
                         rs.getString("nombre"),
                         rs.getString("email"),
                         rs.getString("username"),
                         rs.getString("password"),
-                        rs.getString("rol")
+                        rs.getString("departamento")
+                    );
+                } else {
+                    return new Administrador(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("email"),
+                        rs.getString("username"),
+                        rs.getString("password")
                     );
                 }
             }
         }
-        return null;
     }
+    return null;
+}
+
     public void updateUser(Usuario usuario) throws SQLException {
         String sql = "UPDATE usuarios SET nombre = ?, email = ?, username = ?, password = ?, rol = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -115,27 +136,49 @@ public class UsuarioDAO {
         }
     } 
     public List<Usuario> getAllUsers() throws DataLoadException {
-        String sql = "SELECT * FROM usuarios WHERE activo = TRUE";
-        List<Usuario> users = new ArrayList<>();
+    String sql = "SELECT * FROM usuarios WHERE activo = TRUE";
+    List<Usuario> users = new ArrayList<>();
+    
+    try (Connection conn = DatabaseConnection.getConnection();
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(sql)) {
         
-        try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        while (rs.next()) {
+            String rol = rs.getString("rol").toLowerCase();
             
-            while (rs.next()) {
-                users.add(new Usuario(
+            // Crear instancia según el rol (polimorfismo)
+            if ("tecnico".equals(rol)) {
+                users.add(new Tecnico(
                     rs.getInt("id"),
                     rs.getString("nombre"),
                     rs.getString("email"),
                     rs.getString("username"),
                     rs.getString("password"),
-                    rs.getString("rol")
+                    rs.getString("departamento") // Asegúrate que este campo existe
+                ));
+            } else {
+                users.add(new Administrador(
+                    rs.getInt("id"),
+                    rs.getString("nombre"),
+                    rs.getString("email"),
+                    rs.getString("username"),
+                    rs.getString("password")
                 ));
             }
-            return users;
-            
-        } catch (SQLException e) {
-            throw new DataLoadException("Error al cargar usuarios: " + e.getMessage());
         }
+        return users;
+        
+    } catch (SQLException e) {
+        throw new DataLoadException("Error al cargar usuarios: " + e.getMessage());
     }
+}
+    public int obtenerDepartamentoId(int usuarioId) throws SQLException {
+    String sql = "SELECT departamento_id FROM usuarios_departamentos WHERE usuario_id = ?";
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, usuarioId);
+        ResultSet rs = stmt.executeQuery();
+        return rs.next() ? rs.getInt(1) : -1;
+    }
+}
 }

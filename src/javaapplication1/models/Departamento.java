@@ -50,4 +50,8 @@ public class Departamento {
     public String toString() {
         return nombre; // Para mostrar en ComboBox
     }
+    
+    public void setId(int id) {
+        this.id = id;
+    }
 }

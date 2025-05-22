@@ -9,7 +9,6 @@ import javaapplication1.exceptions.DataLoadException;
 
 public class PilaHistorialDAO {
     
-    // Deshacer último cambio de estado
     public boolean deshacerUltimoCambio(String ticketId) throws SQLException {
         String sql = "SELECT * FROM deshacer_ultimo_cambio(?)";
         
@@ -26,8 +25,7 @@ public class PilaHistorialDAO {
         return false;
     }
     
-    // Obtener todos los cambios de un ticket (para mostrar historial)
     public void obtenerHistorialCompleto(String ticketId) throws DataLoadException {
-        // Implementación similar usando SELECT * FROM historial_estados...
+      
     }
 }
