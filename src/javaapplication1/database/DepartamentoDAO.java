@@ -14,7 +14,7 @@ public class DepartamentoDAO {
     
     // Obtener todos los departamentos activos
     public List<Departamento> getAllDepartamentos() throws DataLoadException {
-        String sql = "SELECT * FROM departamentos WHERE activo = TRUE";
+        String sql = "SELECT * FROM departamentos WHERE estado = TRUE";
         List<Departamento> departamentos = new ArrayList<>();
         
         try (Connection conn = DatabaseConnection.getConnection();
@@ -79,7 +79,7 @@ public class DepartamentoDAO {
     }
 
     public void deactivateDepartamento(int id) throws SQLException {
-        String sql = "UPDATE departamentos SET activo = FALSE WHERE id = ?";
+        String sql = "UPDATE departamentos SET estado = FALSE WHERE id = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

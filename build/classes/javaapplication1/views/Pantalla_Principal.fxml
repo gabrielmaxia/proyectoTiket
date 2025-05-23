@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #1a2b3c;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaapplication1.Controles.DashboardController">
+    
+    <!-- Top: Barra de título -->
+    <top>
+        <HBox style="-fx-background-color: #0f172a; -fx-padding: 15; -fx-alignment: CENTER_LEFT;">
+            <Label text="Panel de Control" style="-fx-text-fill: #e2e8f0; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button onAction="#handleLogout" text="Cerrar Sesión" 
+                    style="-fx-background-color: #334155; -fx-text-fill: #e2e8f0; -fx-font-weight: bold; -fx-padding: 8 15 8 15; -fx-background-radius: 5;"/>
+        </HBox>
+    </top>
+
+    <!-- Center: Contenido principal -->
+    <center>
+        <VBox alignment="CENTER" spacing="30" style="-fx-padding: 40;">
+            <!-- Botón de Tickets -->
+            <Button onAction="#handleViewTickets" text="Gestión de Tickets" 
+                    style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-pref-width: 250px; -fx-pref-height: 60px; -fx-background-radius: 10;"/>
+
+            <!-- Botón de Reportes -->
+            <Button onAction="#handleViewReports" text="Reportes" 
+                    style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-pref-width: 250px; -fx-pref-height: 60px; -fx-background-radius: 10;"/>
+        </VBox>
+    </center>
+
+    <!-- Bottom: Pie de página -->
+    <bottom>
+        <HBox alignment="CENTER" style="-fx-background-color: #0f172a; -fx-padding: 10;">
+            <Label text="© 2024 Sistema de Tickets" style="-fx-text-fill: #94a3b8; -fx-font-size: 12px;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

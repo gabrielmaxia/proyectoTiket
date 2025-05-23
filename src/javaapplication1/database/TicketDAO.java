@@ -20,17 +20,17 @@ import javaapplication1.utils.SessionManager;
 
 public class TicketDAO {
     // Método para cargar todos los tickets (usado en TicketListController)
-    public List<Ticket> getAllTickets() throws SQLException {
+   public List<Ticket> getAllTickets() throws SQLException {
     List<Ticket> tickets = new ArrayList<>();
     String sql = """
-            SELECT t.id, t.titulo as title, t.descripcion as description, 
-                   t.estado as status, t.fecha_creacion as date,
-                   t.prioridad as priority, t.usuario_id, t.departamento_id,
-                   u.nombre as usuario_nombre, d.nombre as departamento_nombre
-            FROM tickets t
-            LEFT JOIN usuarios u ON t.usuario_id = u.id
-            LEFT JOIN departamentos d ON t.departamento_id = d.id
-            """;
+        SELECT 
+            id, 
+            titulo as title, 
+            estado as status, 
+            TO_CHAR(fecha_creacion, 'YYYY-MM-DD HH24:MI') as date,
+            descripcion
+        FROM tickets
+        """;
     
     try (Connection conn = DatabaseConnection.getConnection();
          Statement stmt = conn.createStatement();
@@ -42,14 +42,13 @@ public class TicketDAO {
                 rs.getString("title"),
                 rs.getString("status"),
                 rs.getString("date"),
-                "" // Descripción opcional
+                rs.getString("descripcion")
             );
             tickets.add(ticket);
         }
     }
     return tickets;
 }
-
     // Método para crear un ticket (usado en NewTicketController)
     public void createTicket(Ticket ticket, int usuarioId) throws SQLException {
         String sql = "INSERT INTO tickets (id, titulo, descripcion, usuario_id, departamento, prioridad) VALUES (?, ?, ?, ?, ?, ?)";
@@ -290,6 +289,7 @@ public void createSimpleTicket(String titulo, String descripcion, String departa
     
     // 3. Obtener usuario_id desde la sesión (ejemplo)
     int usuarioId = SessionManager.getCurrentUser().getId(); // Ajusta según tu SessionManager
+    String ticketId = generarNuevoTicketId();
 
     // 4. Insertar ticket
     String sqlInsert = """
@@ -300,7 +300,6 @@ public void createSimpleTicket(String titulo, String descripcion, String departa
     try (Connection conn = DatabaseConnection.getConnection();
          PreparedStatement stmt = conn.prepareStatement(sqlInsert)) {
         
-        String ticketId = "TKT-" + System.currentTimeMillis() % 10000;
         
         stmt.setString(1, ticketId);
         stmt.setString(2, titulo);
@@ -316,5 +315,108 @@ public void createSimpleTicket(String titulo, String descripcion, String departa
         }
     }
 }
+
+public boolean cambiarEstado(int ticketId, String nuevoEstado, String estadoActual) throws SQLException {
+    String sql = "SELECT 1 FROM flujos_trabajo WHERE estado_actual = ? AND estado_siguiente = ?";
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, estadoActual);
+        stmt.setString(2, nuevoEstado);
+        ResultSet rs = stmt.executeQuery();
+        if (!rs.next()) {
+            return false; // Transición no permitida
+        }
+    }
+    
+    // Si pasa la validación, actualiza el estado
+    sql = "UPDATE tickets SET estado = ? WHERE id = ?";
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, nuevoEstado);
+        stmt.setInt(2, ticketId);
+        return stmt.executeUpdate() > 0;
+    }
+    
+    
+}
      
+public List<Ticket> obtenerTicketsPorDepartamento(int departamentoId, String estadoFiltro, String prioridadFiltro) throws SQLException {
+    List<Ticket> tickets = new ArrayList<>();
+    StringBuilder sql = new StringBuilder("""
+    SELECT t.*, d.nombre AS nombre_departamento
+    FROM tickets t
+    JOIN departamentos d ON t.departamento_id = d.id
+    WHERE t.departamento_id = ?
+    """);
+
+    if (estadoFiltro != null && !estadoFiltro.isBlank()) {
+        sql.append(" AND t.estado = ?");
+    }
+
+    if (prioridadFiltro != null && !prioridadFiltro.isBlank()) {
+        sql.append(" AND t.prioridad = ?");
+    }
+
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+
+        int paramIndex = 1;
+        stmt.setInt(paramIndex++, departamentoId);
+
+        if (estadoFiltro != null && !estadoFiltro.isBlank()) {
+            stmt.setString(paramIndex++, estadoFiltro);
+        }
+
+        if (prioridadFiltro != null && !prioridadFiltro.isBlank()) {
+            stmt.setString(paramIndex++, prioridadFiltro);
+        }
+
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Ticket ticket = new Ticket(
+                    rs.getInt("id"),
+                    rs.getString("titulo"),
+                    rs.getString("descripcion"),
+                    rs.getString("estado"),
+                    rs.getString("prioridad"),
+                    rs.getInt("usuario_id"),
+                    rs.getInt("departamento_id")
+                );
+                ticket.setDepartamentoNombre(rs.getString("nombre_departamento"));
+                ticket.setDate(rs.getString("fecha_creacion"));
+                ticket.setFechaCierre(rs.getString("fecha_cierre"));
+                tickets.add(ticket);
+            }
+        }
+    }
+    return tickets;
+}
+
+
+public void actualizarEstado(String ticketId, String nuevoEstado) throws SQLException {
+    String sql = "UPDATE tickets SET estado = ? WHERE id = ?";
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, nuevoEstado);
+        stmt.setString(2, ticketId);
+        stmt.executeUpdate();
+    }
+}
+public String generarNuevoTicketId() throws SQLException {
+    String sql = "SELECT id FROM tickets WHERE id LIKE 'TICK-%' ORDER BY id DESC LIMIT 1";
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        if (rs.next()) {
+            String ultimoId = rs.getString("id"); // ej. "TICK-003"
+            int numero = Integer.parseInt(ultimoId.substring(5)); // extrae el número
+            return String.format("TICK-%03d", numero + 1);
+        } else {
+            return "TICK-001";
+        }
+    }
+}
+
+
 }

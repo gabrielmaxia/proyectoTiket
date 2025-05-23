@@ -29,11 +29,18 @@ private void handleLogin() {
         
         SessionManager.login(user);
         
-        if (user.getRol().equals("admin")) { // Ahora coincide exactamente con tu BD
-            JavaApplication1.showAdminDashboard();
-        } else {
-            JavaApplication1.showDashboard();
-        }
+        switch (user.getRol().toLowerCase()) {
+                case "admin":
+                    JavaApplication1.showAdminDashboard();
+                    break;
+                    
+                case "tecnico":
+                    JavaApplication1.showTecnicoDashboard(); // Asume que tienes este método
+                    break;
+                    
+                default: // Usuario normal
+                    JavaApplication1.showDashboard();
+            }
         
     } catch (AuthenticationException e) {
         errorLabel.setText("Error: " + e.getMessage());

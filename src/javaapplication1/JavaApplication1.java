@@ -100,6 +100,11 @@ public static void showErrorAlert(String title, String message) {
     primaryStage.setTitle("Reportes del Sistema");
     primaryStage.setScene(new Scene(root, 1000, 700));
 }
+    public static void showTecnicoDashboard() throws Exception {
+    Parent root = FXMLLoader.load(JavaApplication1.class.getResource("/javaapplication1/views/TecnicoDashboard.fxml"));
+    primaryStage.setTitle("Panel del Técnico");
+    primaryStage.setScene(new Scene(root, 1000, 700));
+}
 
     public static void main(String[] args) {
         launch(args);

@@ -1,6 +1,9 @@
 package javaapplication1;
 
+import java.util.Stack;
 import javaapplication1.models.Usuario;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  *
@@ -25,6 +28,8 @@ public class Ticket {
         this(id, title, "Pendiente", java.time.LocalDate.now().toString(), "");
     }
 public Ticket(String id, String title, String status, String date, String description) {
+    
+    
         // Validación de datos
         if(id == null || id.isEmpty()) {
             throw new IllegalArgumentException("ID no puede estar vacío");
@@ -35,10 +40,42 @@ public Ticket(String id, String title, String status, String date, String descri
         this.date = date;
         this.descripcion = description;
     }
+public Ticket(int id, String titulo, String descripcion, String estado, 
+              String prioridad, int usuarioId, int departamentoId) {
+    this(String.valueOf(id), titulo, estado, "", descripcion);
+    // Asigna los demás campos si son necesarios
+    this.prioridad = prioridad;
+    this.usuarioId = usuarioId;
+    this.departamentoId = departamentoId;
+}
 
 public void aplicarCambioEstado(Usuario usuario, String nuevoEstado) {
     usuario.cambiarEstadoTicket(this, nuevoEstado); // Polimorfismo aquí
 }
+
+public StringProperty idProperty() {
+        return new SimpleStringProperty(id);
+    }
+
+    public StringProperty titleProperty() {
+        return new SimpleStringProperty(title);
+    }
+
+    public StringProperty statusProperty() {
+        return new SimpleStringProperty(estado);
+    }
+
+    public StringProperty dateProperty() {
+        return new SimpleStringProperty(date);
+    }
+
+    public StringProperty priorityProperty() {
+        return new SimpleStringProperty(prioridad);
+    }
+
+    public StringProperty departamentoNombreProperty() {
+        return new SimpleStringProperty(departamentoNombre);
+    }
 
  
     public String getId() { return id; }
@@ -89,7 +126,15 @@ public void aplicarCambioEstado(Usuario usuario, String nuevoEstado) {
     public void setFechaCierre(String fechaCierre) {
     this.fechaCierre = fechaCierre;
 }
-    
+    private Stack<String> historialEstados = new Stack<>();
+
+public void agregarAlHistorial(String cambio) {
+    historialEstados.push(cambio);
+}
+
+public Stack<String> getHistorial() {
+    return historialEstados;
+}
     
 
 }

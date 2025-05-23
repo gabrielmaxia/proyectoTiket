@@ -31,11 +31,13 @@ private void handleSubmit() {
             errorLabel.setText("Título y descripción son obligatorios");
             return;
         }
+        
 
         String departamento = departmentField.getValue();
         String prioridad = priorityField.getValue();
         
         if (departamento == null || prioridad == null) {
+            errorLabel.setStyle("-fx-text-fill: red;");
             errorLabel.setText("Seleccione departamento y prioridad");
             return;
         }
@@ -65,4 +67,5 @@ private void handleSubmit() {
             errorLabel.setText("Error al volver al dashboard: " + e.getMessage());
         }
     }
+    
 }

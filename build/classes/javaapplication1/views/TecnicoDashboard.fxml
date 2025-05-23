@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="javaapplication1.Controles.TecnicoDashboardController"
+      spacing="15"
+      style="-fx-padding: 25; -fx-background-color: #f4f4f4;">
+
+    <!-- Título -->
+    <Label text="Panel del Técnico"
+           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+
+    <!-- Filtros -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Filtrar por:" style="-fx-font-weight: bold;" />
+        <ComboBox fx:id="estadoFilter" promptText="Estado" />
+        <ComboBox fx:id="prioridadFilter" promptText="Prioridad" />
+        <Button text="Aplicar Filtros"
+                onAction="#handleFiltrar"
+                style="-fx-background-color: #2196F3; -fx-text-fill: white;" />
+    </HBox>
+
+    <!-- Tabla de tickets -->
+    <TableView fx:id="ticketsTable" style="-fx-background-color: white; -fx-border-color: lightgray;">
+        <columns>
+            <TableColumn text="ID" fx:id="idColumn" prefWidth="80" />
+            <TableColumn text="Título" fx:id="titleColumn" prefWidth="200" />
+            <TableColumn text="Estado" fx:id="statusColumn" prefWidth="100" />
+            <TableColumn text="Prioridad" fx:id="priorityColumn" prefWidth="100" />
+        </columns>
+    </TableView>
+
+    <!-- Botones de acción -->
+    <HBox spacing="12" alignment="CENTER">
+        <Button text="Tomar Ticket"
+                onAction="#handleTomarTicket"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+        <Button text="Marcar en Proceso"
+                onAction="#handleEnProceso"
+                style="-fx-background-color: #FFC107; -fx-text-fill: black;" />
+        <Button text="Cerrar Ticket"
+                onAction="#handleCerrarTicket"
+                style="-fx-background-color: #f44336; -fx-text-fill: white;" />
+    </HBox>
+
+    <!-- Botón para cerrar sesión -->
+    <HBox alignment="CENTER_RIGHT">
+        <Button text="Cerrar Sesión"
+                onAction="#handleCerrarSesion"
+                style="-fx-background-color: #9E9E9E; -fx-text-fill: white;" />
+    </HBox>
+</VBox>

@@ -12,7 +12,7 @@ package javaapplication1.models;
 import javaapplication1.Ticket;
 
 public abstract class Usuario extends Persona{
-    
+    protected int departamentoId;
     private String username;
     private String password;
     private String rol;
@@ -34,6 +34,12 @@ public abstract class Usuario extends Persona{
     public void setRol(String rol) { this.rol = rol; }
     
     public abstract void cambiarEstadoTicket(Ticket ticket, String nuevoEstado);
+    
+    public int getDepartamentoId() {
+    return this.departamentoId; // Asegúrate que tengas este campo
+}
+    
+    
 }
 
 

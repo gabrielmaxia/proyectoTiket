@@ -40,7 +40,7 @@
                 <TableColumn fx:id="titleColumn" prefWidth="200" text="Título"/>
                 <TableColumn fx:id="statusColumn" prefWidth="100" text="Estado" style="-fx-alignment: CENTER;"/>
                 <TableColumn fx:id="dateColumn" prefWidth="150" text="Fecha" style="-fx-alignment: CENTER;"/>
-                <TableColumn fx:id="actionsColumn" prefWidth="150" text="Acciones"/>
+             
             </columns>
         </TableView>
     </center>

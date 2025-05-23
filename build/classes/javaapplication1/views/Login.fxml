@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="300.0" spacing="20" 
+      style="-fx-background-color: #2d3748; -fx-padding: 30;" 
+      xmlns="http://javafx.com/javafx/17" 
+      xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="javaapplication1.Controles.LoginController">
+
+    <!-- Título -->
+    <Label text="USER LOGIN" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #f7fafc;">
+        <font>
+            <Font name="System Bold" size="24.0" />
+        </font>
+    </Label>
+
+    <!-- Campos de entrada -->
+    <VBox alignment="CENTER_LEFT" spacing="5" style="-fx-padding: 0 20 0 20;">
+        <Label text="Username" style="-fx-font-size: 14px; -fx-text-fill: #e2e8f0;"/>
+        <TextField fx:id="usernameField" style="-fx-pref-width: 260px; -fx-pref-height: 35px; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #4a5568; -fx-background-color: #4a5568; -fx-text-fill: #f7fafc;"/>
+        
+        <Label text="Password" style="-fx-font-size: 14px; -fx-text-fill: #e2e8f0; -fx-padding: 10 0 0 0;"/>
+        <PasswordField fx:id="passwordField" style="-fx-pref-width: 260px; -fx-pref-height: 35px; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #4a5568; -fx-background-color: #4a5568; -fx-text-fill: #f7fafc;"/>
+    </VBox>
+
+    <!-- Botón de login -->
+    <Button onAction="#handleLogin" text="LOGIN" 
+            style="-fx-background-color: #4299e1; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-width: 260px; -fx-pref-height: 40px; -fx-background-radius: 5; -fx-border-radius: 5; -fx-cursor: hand;"/>
+    
+    <!-- Mensaje de error -->
+    <Label fx:id="errorLabel" style="-fx-text-fill: #fc8181; -fx-padding: 10 0 0 0;"/>
+</VBox>

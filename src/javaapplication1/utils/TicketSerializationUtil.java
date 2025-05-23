@@ -8,19 +8,17 @@ import javaapplication1.Ticket;
 import java.io.*;
 import java.util.List;
 
-public class TicketSerializationUtil {
-    
-    // Guardar lista de tickets en archivo
-    public static void guardarTickets(String rutaArchivo, List<Ticket> tickets) throws IOException {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(rutaArchivo))) {
+    public class TicketSerializationUtil {
+    public static void guardarTickets(List<Ticket> tickets, String archivo) throws IOException {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
             oos.writeObject(tickets);
         }
     }
 
-    // Cargar lista de tickets desde archivo
-    public static List<Ticket> cargarTickets(String rutaArchivo) throws IOException, ClassNotFoundException {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(rutaArchivo))) {
+    public static List<Ticket> cargarTickets(String archivo) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
             return (List<Ticket>) ois.readObject();
         }
     }
-}
+    }
+    

@@ -16,7 +16,13 @@ import javax.naming.AuthenticationException;
 public class UsuarioDAO {
     // Método para autenticar un usuario (usado en LoginController)
     public Usuario authenticate(String username, String password) throws AuthenticationException {
-    String sql = "SELECT * FROM usuarios WHERE username = ? AND password = ?";
+   String sql = """
+    SELECT u.*, d.nombre AS departamento
+    FROM usuarios u
+    LEFT JOIN usuarios_departamentos ud ON u.id = ud.usuario_id
+    LEFT JOIN departamentos d ON ud.departamento_id = d.id
+    WHERE u.username = ? AND u.password = ?
+""";
     
     try (Connection conn = DatabaseConnection.getConnection();
          PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -127,7 +133,7 @@ public class UsuarioDAO {
         }
     }
     public void deactivateUser(int id) throws SQLException {
-        String sql = "UPDATE usuarios SET activo = FALSE WHERE id = ?";
+        String sql = "UPDATE usuarios SET estado = FALSE WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
@@ -136,7 +142,7 @@ public class UsuarioDAO {
         }
     } 
     public List<Usuario> getAllUsers() throws DataLoadException {
-    String sql = "SELECT * FROM usuarios WHERE activo = TRUE";
+    String sql = "SELECT * FROM usuarios WHERE estado = TRUE";
     List<Usuario> users = new ArrayList<>();
     
     try (Connection conn = DatabaseConnection.getConnection();
