@@ -4,12 +4,13 @@ import java.util.Stack;
 import javaapplication1.models.Usuario;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import java.io.Serializable;
 
 /**
  *
  * @author ag045
  */
-public class Ticket {
+public class Ticket implements Serializable{
     private String id;
     private String title;
     private String estado;
@@ -91,6 +92,7 @@ public StringProperty idProperty() {
     
     // Getters y Setters
     
+     
     
     public String getStatus() { return estado; }
     public String getDate() { return date; }
@@ -98,6 +100,12 @@ public StringProperty idProperty() {
     public void setId(String id) { this.id = id; }
     //public void setTitle(String title) { this.title = title; }
     public void setStatus(String status) { this.estado = status; }
+    
+       public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
+    
+    
+    
     public void setDate(String date) { this.date = date; }
     
     public int getUsuarioId() { return usuarioId; }
@@ -117,8 +125,14 @@ public StringProperty idProperty() {
         this.departamentoNombre = departamentoNombre; 
     }
     
-    public String getPriority() { return prioridad; }
-    public void setPriority(String priority) { this.prioridad = priority; }
+    public String getPrioridad() { 
+        return prioridad; 
+    }
+      public void setPrioridad(String prioridad) { 
+        this.prioridad = prioridad; 
+    }
+     public String getPriority() { return getPrioridad(); }
+    public void setPriority(String priority) { setPrioridad(priority); }
     
     public String getFechaCierre() {
     return fechaCierre;

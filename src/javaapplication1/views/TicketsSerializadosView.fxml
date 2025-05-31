@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="javaapplication1.Controles.TicketsSerializadosController" prefWidth="600" prefHeight="400">
+    <top>
+        <Label text="Tickets Serializados" style="-fx-font-size: 20px; -fx-padding: 10;" />
+    </top>
+    <center>
+        <TableView fx:id="tablaTickets" prefHeight="300">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" />
+                <TableColumn fx:id="colTitulo" text="Título" />
+                <TableColumn fx:id="colEstado" text="Estado" />
+                <TableColumn fx:id="colPrioridad" text="Prioridad" />
+            </columns>
+        </TableView>
+    </center>
+    <bottom>
+        <Button text="Cerrar" onAction="#cerrarVentana" style="-fx-padding: 5 10; -fx-background-color: #f44336; -fx-text-fill: white;" />
+    </bottom>
+</BorderPane>

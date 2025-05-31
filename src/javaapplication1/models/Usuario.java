@@ -36,7 +36,8 @@ public abstract class Usuario extends Persona{
     public abstract void cambiarEstadoTicket(Ticket ticket, String nuevoEstado);
     
     public int getDepartamentoId() {
-    return this.departamentoId; // Asegúrate que tengas este campo
+    // Asegúrate que no devuelva 0
+    return this.departamentoId <= 0 ? 1 : this.departamentoId; // Valor por defecto 1 como fallback
 }
     
     

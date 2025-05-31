@@ -7,14 +7,14 @@ public class Departamento {
     private int id;
     private String nombre;
     private String descripcion;
-    private boolean estado;
+    private boolean activo;
 
     // Constructor
     public Departamento(int id, String nombre, String descripcion) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.estado = true;
+        this.activo = true;
     }
 
     // Getters y Setters
@@ -39,11 +39,11 @@ public class Departamento {
     }
 
     public boolean isEstado() {
-        return estado;
+        return activo;
     }
 
     public void setEstado(boolean estado) {
-        this.estado = estado;
+        this.activo = estado;
     }
 
     @Override

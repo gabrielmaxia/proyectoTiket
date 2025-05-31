@@ -49,5 +49,14 @@ private void handleViewReports() {
     }
 }
 
+ @FXML
+private void NuevoU() {
+    try {
+        JavaApplication1.showCrearUsuarioScreen();
+    } catch (Exception e) {
+        System.err.println("Error al abrir pantalla de creación de usuario: " + e.getMessage());
+        JavaApplication1.showErrorAlert("Error", "No se pudo abrir la pantalla de creación de usuario");
+    }
+}
 
 }

@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package javaapplication1.database;
 
 /**
@@ -99,7 +96,7 @@ public class TicketDAO {
      
      public void updateTicketStatus(String ticketId, String newStatus, int userId) throws SQLException {
     Ticket ticket = getTicketById(ticketId);
-    String rol = new UsuarioDAO().getUserById(userId).getRol(); // Obtiene el rol del usuario
+       // Obtiene el rol del usuario
     
     // Usa el método polimórfico
     Usuario usuarioActual = SessionManager.getCurrentUser(); // Obtén el usuario logueado
@@ -184,7 +181,7 @@ private List<Ticket> getTicketsResueltos(Connection conn, int dias) throws SQLEx
         JOIN departamentos d ON t.departamento_id = d.id
         WHERE t.estado = 'Resuelto'
         ORDER BY t.fecha_creacion DESC
-        LIMIT 5
+        LIMIT 300
         """;
     
     try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -204,17 +201,6 @@ private List<Ticket> getTicketsResueltos(Connection conn, int dias) throws SQLEx
     }
     return tickets;
 }
-    // Métodos auxiliares privados
-    private Map<String, Integer> getEstadisticas(Connection conn, String sql) throws SQLException {
-        Map<String, Integer> stats = new HashMap<>();
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                stats.put(rs.getString("clave"), rs.getInt("valor"));
-            }
-        }
-        return stats;
-    }
 
     
 public int getTotalTickets() throws SQLException {
@@ -341,6 +327,7 @@ public boolean cambiarEstado(int ticketId, String nuevoEstado, String estadoActu
 }
      
 public List<Ticket> obtenerTicketsPorDepartamento(int departamentoId, String estadoFiltro, String prioridadFiltro) throws SQLException {
+    
     List<Ticket> tickets = new ArrayList<>();
     StringBuilder sql = new StringBuilder("""
     SELECT t.*, d.nombre AS nombre_departamento
@@ -417,6 +404,4 @@ public String generarNuevoTicketId() throws SQLException {
         }
     }
 }
-
-
 }

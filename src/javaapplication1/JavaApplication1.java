@@ -1,12 +1,16 @@
 package javaapplication1;
 
 import java.io.IOException;
+import java.net.URL;
+import javaapplication1.Controles.TicketDetailController;
+import javaapplication1.database.TicketDAO;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class JavaApplication1 extends Application {
@@ -83,11 +87,22 @@ public static void showErrorAlert(String title, String message) {
         primaryStage.setScene(new Scene(root, 1000, 600));
     }
 
-    public static void showTicketDetail(String ticketId) throws Exception {
-        Parent root = FXMLLoader.load(JavaApplication1.class.getResource("/javaapplication1/views/TicketDetail.fxml"));
-        primaryStage.setTitle("Detalle de Ticket");
-        primaryStage.setScene(new Scene(root, 1000, 700));
+    public static void showTicketDetail(Ticket ticket) throws Exception {
+    if (ticket == null) {
+        throw new IllegalArgumentException("Ticket no puede ser nulo");
     }
+    
+    FXMLLoader loader = new FXMLLoader(
+        JavaApplication1.class.getResource("/javaapplication1/views/TicketDetail.fxml"));
+    Parent root = loader.load();
+    
+    TicketDetailController controller = loader.getController();
+    controller.setTicket(ticket);
+    
+    // Usa la ventana principal existente o crea nueva según tu flujo
+    primaryStage.setTitle("Detalle Ticket #" + ticket.getId());
+    primaryStage.setScene(new Scene(root, 800, 600));
+}
     
     public static void showNewTicket() throws Exception {
         Parent root = FXMLLoader.load(JavaApplication1.class.getResource("/javaapplication1/views/NewTicket.fxml"));
@@ -100,10 +115,25 @@ public static void showErrorAlert(String title, String message) {
     primaryStage.setTitle("Reportes del Sistema");
     primaryStage.setScene(new Scene(root, 1000, 700));
 }
+    
     public static void showTecnicoDashboard() throws Exception {
-    Parent root = FXMLLoader.load(JavaApplication1.class.getResource("/javaapplication1/views/TecnicoDashboard.fxml"));
-    primaryStage.setTitle("Panel del Técnico");
+    
+Parent root = FXMLLoader.load(JavaApplication1.class.getResource("/javaapplication1/views/TecnicoDashboard.fxml"));
+    primaryStage.setTitle("Area del tecnico");
     primaryStage.setScene(new Scene(root, 1000, 700));
+    
+    
+}
+  public static void showCrearUsuarioScreen() throws Exception {
+    // Cambiar la ruta a /javaapplication1/views/CrearUsuario.fxml
+    FXMLLoader loader = new FXMLLoader(JavaApplication1.class.getResource("/javaapplication1/views/CrearUsuario.fxml"));
+    Parent root = loader.load();
+    
+    Stage stage = new Stage();
+    stage.setScene(new Scene(root));
+    stage.setTitle("Crear Nuevo Usuario");
+    stage.initModality(Modality.APPLICATION_MODAL);
+    stage.showAndWait();
 }
 
     public static void main(String[] args) {

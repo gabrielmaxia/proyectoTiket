@@ -14,10 +14,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    // === DATOS ACTUALIZADOS CON TU CONFIGURACIÓN DE RENDER ===
-    public static final String URL = "jdbc:postgresql://dpg-d060g6idbo4c73e37ss0-a.oregon-postgres.render.com:5432/tiketbase";
-    private static final String USER = "tiketbase_user";
-    private static final String PASSWORD = "FQj0padJz85XDtfNvwz1CClROM1WxbGW";
+
+    public static final String URL = "jdbc:postgresql://ep-floral-river-a8hadh0h-pooler.eastus2.azure.neon.tech:5432/neondb";
+    private static final String USER = "neondb_owner";
+    private static final String PASSWORD = "npg_uiOLCwQYa9d2";
 
     static {
         try {

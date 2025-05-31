@@ -1,7 +1,7 @@
 package javaapplication1.Controles;
 
 
-
+import java.io.IOException;
 import java.util.List;
 import javaapplication1.JavaApplication1;
 import javaapplication1.Ticket;
@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class ReportesController {
+    @FXML private Label errorLabel;
     @FXML private Label lblTotalTickets;
     @FXML private TableView<Ticket> tblUltimosTickets;
     @FXML private TableColumn<Ticket, String> colId;
@@ -83,4 +84,26 @@ public void initialize() {
             JavaApplication1.showErrorAlert("Error", "No se pudo volver al dashboard");
         }
     }
+    
+    @FXML
+private void handleExportTickets() {
+    try {
+        List<Ticket> observableTickets = tblUltimosTickets.getItems();
+        if (observableTickets == null || observableTickets.isEmpty()) {
+            JavaApplication1.showErrorAlert("Exportación", "No hay tickets para exportar.");
+            return;
+        }
+        List<Ticket> tickets = new ArrayList<>(observableTickets);
+
+        String archivo = "tickets_serializados";
+        javaapplication1.utils.TicketSerializationUtil.guardarTickets(tickets, archivo);
+
+        errorLabel.setStyle("-fx-text-fill: green;");
+        errorLabel.setText("Serealizacion exitosa!");
+        
+    } catch (IOException e) {
+        JavaApplication1.showErrorAlert("Error", "No se pudo guardar el archivo: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
 }

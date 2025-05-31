@@ -46,6 +46,9 @@
         <Button text="Cerrar Ticket"
                 onAction="#handleCerrarTicket"
                 style="-fx-background-color: #f44336; -fx-text-fill: white;" />
+        <Button text="Cargar Tickets Serializados"
+        onAction="#handleCargarSerializados"
+        style="-fx-background-color: #607D8B; -fx-text-fill: white;" />
     </HBox>
 
     <!-- Botón para cerrar sesión -->
@@ -54,4 +57,5 @@
                 onAction="#handleCerrarSesion"
                 style="-fx-background-color: #9E9E9E; -fx-text-fill: white;" />
     </HBox>
+    
 </VBox>

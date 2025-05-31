@@ -5,6 +5,7 @@
 package javaapplication1.Controles;
 
 
+import java.io.IOException;
 import javafx.fxml.FXML;
 import javaapplication1.JavaApplication1;
 import javaapplication1.Ticket;
@@ -17,10 +18,15 @@ import java.sql.SQLException;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 
 public class TicketListController {
@@ -94,12 +100,37 @@ public class TicketListController {
     }
     
     private void mostrarDetalleTicket(Ticket ticket) {
-        try {
-            JavaApplication1.showTicketDetail(ticket.getId());
-        } catch (Exception e) {
-            showAlert("Error", "No se pudo abrir el ticket: " + e.getMessage());
+    try {
+        // Verificación adicional
+        if (ticket == null || ticket.getId() == null) {
+            showAlert("Error", "Ticket no válido seleccionado");
+            return;
         }
+        
+        System.out.println("Intentando abrir ticket ID: " + ticket.getId());
+        
+        // Cargar el FXML primero
+        FXMLLoader loader = new FXMLLoader(
+            getClass().getResource("/javaapplication1/views/TicketDetail.fxml"));
+        Parent root = loader.load();
+        
+        // Obtener el controlador y pasar el ticket COMPLETO
+        TicketDetailController controller = loader.getController();
+        controller.setTicket(ticket); // Pasamos el objeto completo, no solo el ID
+        
+        // Crear nueva escena
+        Stage stage = new Stage();
+        stage.setTitle("Detalle Ticket #" + ticket.getId());
+        stage.setScene(new Scene(root, 800, 600));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+        
+    } catch (Exception e) {
+        System.err.println("Error inesperado:");
+        e.printStackTrace();
+        showAlert("Error", "Ocurrió un error inesperado");
     }
+}
     
 @FXML
 private void handleBack() throws Exception {
@@ -107,42 +138,7 @@ private void handleBack() throws Exception {
     
 }
     
-     @FXML
-    private void handleTomarProximoTicket() throws Exception {
-        try {
-            if (!SessionManager.isTecnico()) {
-                showAlert("Error", "Solo los técnicos pueden tomar tickets");
-                return;
-            }
-            
-            int deptoId = new UsuarioDAO().obtenerDepartamentoId(
-                SessionManager.getCurrentUser().getId()
-            );
-            
-            if (deptoId == -1) {
-                showAlert("Error", "No tienes departamento asignado");
-                return;
-            }
-            
-            Ticket proximoTicket = new ColaTicketsDAO().obtenerProximoTicket(deptoId);
-            
-            if (proximoTicket != null) {
-                new TicketDAO().updateTicketStatus(
-                    proximoTicket.getId(), 
-                    "en_proceso",
-                    SessionManager.getCurrentUser().getId()
-                );
-                loadTicketData(); // Refrescar la tabla
-                JavaApplication1.showTicketDetail(proximoTicket.getId());
-            } else {
-                showAlert("Info", "No hay tickets disponibles en tu departamento");
-            }
-            
-        } catch (SQLException e) {
-            showAlert("Error", "Error de base de datos: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
+     
     
     @FXML
     private void handleNewTicket() throws Exception {

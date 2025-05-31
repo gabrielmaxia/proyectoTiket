@@ -26,6 +26,12 @@ private String departamentoNombre;
     this.departamentoNombre = departamentoNombre;
     // this.departamentoId puede asignarse después si es necesario
 }
+    public Tecnico(int id, String nombre, String email, String username, 
+               String password, int departamentoId) {
+    super(id, nombre, email, username, password, "tecnico");
+    this.departamentoId = departamentoId;
+   
+}
 
 @Override
 public void cambiarEstadoTicket(Ticket ticket, String nuevoEstado) {

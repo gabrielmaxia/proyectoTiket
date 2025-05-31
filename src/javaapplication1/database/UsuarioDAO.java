@@ -66,55 +66,67 @@ public class UsuarioDAO {
 
     // Métodos adicionales (registro, actualización, etc.)
     public void addUser(Usuario usuario) throws SQLException {
-        String sql = "INSERT INTO usuarios (nombre, email, username, password, rol) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setString(1, usuario.getNombre());
-            stmt.setString(2, usuario.getEmail());
-            stmt.setString(3, usuario.getUsername());
-            stmt.setString(4, usuario.getPassword()); // Debería estar cifrada
-            stmt.setString(5, usuario.getRol());
-            
-            stmt.executeUpdate();
-            try (ResultSet rs = stmt.getGeneratedKeys()) {
-                if (rs.next()) {
-                    usuario.setId(rs.getInt(1));
-                }
-        }
-    }
-}
-    public Usuario getUserById(int id) throws SQLException {
-    String sql = "SELECT * FROM usuarios WHERE id = ?";
-    try (Connection conn = DatabaseConnection.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
+    Connection conn = null;
+    PreparedStatement stmtUsuario = null;
+    PreparedStatement stmtRelacion = null;
+    
+    try {
+        conn = DatabaseConnection.getConnection();
+        conn.setAutoCommit(false); // Iniciar transacción
+
+        // 1. Insertar usuario SIN especificar el ID (dejando que la secuencia lo genere)
+        String sqlUsuario = "INSERT INTO usuarios (nombre, email, username, password, rol, activo, fecha_creacion) " +
+                          "VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+        stmtUsuario = conn.prepareStatement(sqlUsuario, Statement.RETURN_GENERATED_KEYS);
         
-        stmt.setInt(1, id);
-        try (ResultSet rs = stmt.executeQuery()) {
+        stmtUsuario.setString(1, usuario.getNombre());
+        stmtUsuario.setString(2, usuario.getEmail());
+        stmtUsuario.setString(3, usuario.getUsername());
+        stmtUsuario.setString(4, usuario.getPassword());
+        stmtUsuario.setString(5, usuario.getRol());
+        stmtUsuario.setBoolean(6, true);
+        
+        int affectedRows = stmtUsuario.executeUpdate();
+        
+        if (affectedRows == 0) {
+            throw new SQLException("No se pudo crear el usuario, ninguna fila afectada");
+        }
+
+        // Obtener el ID generado automáticamente
+        try (ResultSet rs = stmtUsuario.getGeneratedKeys()) {
             if (rs.next()) {
-                String rol = rs.getString("rol").toLowerCase();
-                if ("tecnico".equals(rol)) {
-                    return new Tecnico(
-                        rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("email"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("departamento")
-                    );
-                } else {
-                    return new Administrador(
-                        rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("email"),
-                        rs.getString("username"),
-                        rs.getString("password")
-                    );
-                }
+                usuario.setId(rs.getInt(1)); // Asignar el ID generado
+            } else {
+                throw new SQLException("No se pudo obtener el ID del usuario creado");
             }
         }
+
+        // 2. Si es técnico, insertar la relación con departamento
+        if (usuario instanceof Tecnico) {
+            Tecnico tecnico = (Tecnico) usuario;
+            String sqlRelacion = "INSERT INTO usuarios_departamentos (usuario_id, departamento_id, fecha_asignacion) " +
+                               "VALUES (?, ?, CURRENT_TIMESTAMP)";
+            
+            stmtRelacion = conn.prepareStatement(sqlRelacion);
+            stmtRelacion.setInt(1, usuario.getId());
+            stmtRelacion.setInt(2, tecnico.getDepartamentoId());
+            stmtRelacion.executeUpdate();
+        }
+
+        conn.commit(); // Confirmar transacción
+    } catch (SQLException e) {
+        if (conn != null) {
+            conn.rollback(); // Revertir en caso de error
+        }
+        throw e;
+    } finally {
+        if (stmtRelacion != null) stmtRelacion.close();
+        if (stmtUsuario != null) stmtUsuario.close();
+        if (conn != null) {
+            conn.setAutoCommit(true);
+            conn.close();
+        }
     }
-    return null;
 }
 
     public void updateUser(Usuario usuario) throws SQLException {

@@ -26,6 +26,10 @@
             <!-- Botón de Reportes -->
             <Button onAction="#handleViewReports" text="Reportes" 
                     style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-pref-width: 250px; -fx-pref-height: 60px; -fx-background-radius: 10;"/>
+            
+            <Button onAction="#NuevoU" text="Nuevo Usuario" 
+                    style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-pref-width: 250px; -fx-pref-height: 60px; -fx-background-radius: 10;"/>
+                    
         </VBox>
     </center>
 

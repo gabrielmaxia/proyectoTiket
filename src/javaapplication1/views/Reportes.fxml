@@ -41,15 +41,21 @@
                             <TableColumn text="Fecha Creación" prefWidth="150" fx:id="colFecha"/>
                         </columns>
                     </TableView>
+                    <Label fx:id="errorLabel" text="" style="-fx-text-fill: red;" />
                 </VBox>
             </VBox>
         </ScrollPane>
     </center>
     
     <bottom>
-        <HBox alignment="CENTER_RIGHT" style="-fx-padding: 20 0 0 0;">
-            <Button text="Volver al Dashboard" onAction="#handleBackToDashboard" 
-                    style="-fx-background-color: #e2e8f0; -fx-text-fill: #2d3748; -fx-font-weight: bold;"/>
+        
+        <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 20 0 0 0;">
+   
+        <Button text="Volver al Dashboard" onAction="#handleBackToDashboard"
+            style="-fx-background-color: #e2e8f0; -fx-text-fill: #2d3748; -fx-font-weight: bold;"/>
+
+             <Button text="Exportar Tickets" onAction="#handleExportTickets"
+            style="-fx-background-color: #4299e1; -fx-text-fill: white; -fx-font-weight: bold;"/>
         </HBox>
     </bottom>
 </BorderPane>
